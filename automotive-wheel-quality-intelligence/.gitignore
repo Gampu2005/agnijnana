@@ -84,6 +84,7 @@ data/sample/*
 *.zip
 *.7z
 *.csv
+!backend/app/data/*.csv
 *.parquet
 
 # Jupyter Notebooks

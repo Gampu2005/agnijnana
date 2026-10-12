@@ -65,24 +65,33 @@ def normalize_defect_label(value: Any) -> str:
 class RootCauseEngine:
     """Load and query a CSV-based engineering root-cause knowledge base."""
 
+    DEFAULT_ROWS = [
+        {"defect_class": "scratch", "probable_root_cause": "Handling or fixture contact issue", "process_factors": "vibration;handling speed;contact surface", "corrective_action": "Inspect handling path, fixture and contact surfaces for rubbing or sharp edges.", "knowledge_confidence": "0.82", "process_stage": "handling"},
+        {"defect_class": "scuff", "probable_root_cause": "Handling or fixture contact issue", "process_factors": "vibration;handling speed;contact surface", "corrective_action": "Inspect fixture/handling surfaces and reduce excessive relative movement.", "knowledge_confidence": "0.82", "process_stage": "handling"},
+        {"defect_class": "paint_damage", "probable_root_cause": "Coating-process deviation", "process_factors": "humidity;coating speed;surface preparation", "corrective_action": "Inspect coating parameters, environmental humidity and surface preparation.", "knowledge_confidence": "0.88", "process_stage": "finishing"},
+        {"defect_class": "bent_rim", "probable_root_cause": "Tooling or process deformation", "process_factors": "pressure;thermal condition;fixture alignment", "corrective_action": "Inspect tooling/fixture alignment and verify the forming/casting process settings.", "knowledge_confidence": "0.78", "process_stage": "casting"},
+        {"defect_class": "crack", "probable_root_cause": "Thermal stress or cooling imbalance", "process_factors": "melt temperature;die temperature;cooling rate", "corrective_action": "Verify thermal control and cooling balance; inspect for abnormal thermal gradients.", "knowledge_confidence": "0.91", "process_stage": "casting"},
+        {"defect_class": "porosity", "probable_root_cause": "Gas entrapment or material-condition issue", "process_factors": "melt temperature;fill pressure;degassing;venting", "corrective_action": "Inspect melt quality/degassing and verify filling, pressure and venting conditions.", "knowledge_confidence": "0.90", "process_stage": "casting"},
+        {"defect_class": "blow_hole", "probable_root_cause": "Gas entrapment or contamination", "process_factors": "melt condition;pressure;venting;moisture", "corrective_action": "Check gas control, moisture/contamination sources and venting; verify filling conditions.", "knowledge_confidence": "0.89", "process_stage": "casting"},
+        {"defect_class": "incomplete_welding", "probable_root_cause": "Insufficient joining-process control", "process_factors": "joining pressure;process speed;cleanliness", "corrective_action": "Verify joining parameters, surface preparation and process speed/pressure.", "knowledge_confidence": "0.86", "process_stage": "welding"},
+    ]
+
     def __init__(self, mapping_file: str | Path | None = None) -> None:
         self.mapping_file = Path(mapping_file) if mapping_file else (
                 Path(__file__).resolve().parents[1] / "data" / "root_cause_mapping.csv"
         )
-        if not self.mapping_file.is_file():
-            raise FileNotFoundError(f"Root-cause mapping CSV not found: {self.mapping_file}")
+        self._mapping: dict[str, list[dict[str, Any]]] = {}
 
-        with self.mapping_file.open("r", encoding="utf-8-sig", newline="") as handle:
-            reader = csv.DictReader(handle)
-            headers = set(reader.fieldnames or [])
-            missing = sorted(_REQUIRED_COLUMNS - headers)
-            if missing:
-                raise ValueError(
-                    f"Root-cause mapping CSV is missing required columns: {', '.join(missing)}"
-                )
+        rows = []
+        if self.mapping_file.is_file():
+            with self.mapping_file.open("r", encoding="utf-8-sig", newline="") as handle:
+                reader = csv.DictReader(handle)
+                rows = list(reader)
+        else:
+            logger.warning("Root-cause mapping CSV not found at %s. Using embedded knowledge baseline.", self.mapping_file)
+            rows = self.DEFAULT_ROWS
 
-            self._mapping: dict[str, list[dict[str, Any]]] = {}
-            for row in reader:
+        for row in rows:
                 key = normalize_defect_label(row.get("defect_class"))
                 if not key:
                     continue
