@@ -1,17 +1,29 @@
 # AGNIJNANA — Autonomous Automotive Wheel Quality Intelligence
 
+[![Live Application](https://img.shields.io/badge/Live_App-agnijnana.vercel.app-blueviolet?style=for-the-badge&logo=vercel&logoColor=white)](https://agnijnana.vercel.app)
+[![API Status](https://img.shields.io/badge/Backend_API-agnijnana--backend.onrender.com-success?style=for-the-badge&logo=render&logoColor=white)](https://agnijnana-backend.onrender.com/health)
+[![API Docs](https://img.shields.io/badge/Swagger_Docs-Interactive_API-orange?style=for-the-badge&logo=fastapi&logoColor=white)](https://agnijnana-backend.onrender.com/docs)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-009688.svg?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-18.2+-61DAFB.svg?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Three.js](https://img.shields.io/badge/Three.js-0.160+-black.svg?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org)
 [![Vite](https://img.shields.io/badge/Vite-5.0+-646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Supabase](https://img.shields.io/badge/Supabase-Database%20%26%20Storage-3ECF8E.svg?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
-[![Render](https://img.shields.io/badge/Render-Backend%20Hosting-46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
-[![Vercel](https://img.shields.io/badge/Vercel-Frontend%20Hosting-000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.14-3776AB.svg?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Status](https://img.shields.io/badge/Build-Passing%20100%25-success.svg?style=for-the-badge)](https://github.com/Ganesh40292/Agnijnana)
 
 > **SINGULARITY 2026 — Track 3: Autonomous Quality Metrology & Industrial Defect Intelligence**  
 > An enterprise-grade, end-to-end industrial quality assurance cockpit for cast aluminium alloy automotive wheel assemblies and radial tyres. Combines computer vision metrology, explainable physics-guided root-cause telemetry, and predictive drift forecasting to achieve zero-defect manufacturing.
+
+---
+
+## 🌐 Live Cloud Deployment Links
+
+| Service | Component | Live URL | Description |
+| :--- | :--- | :--- | :--- |
+| **Frontend** | React + Three.js Single Page App | [https://agnijnana.vercel.app](https://agnijnana.vercel.app) | Interactive Quality Metrology Cockpit & 3D Twin |
+| **Backend** | FastAPI Production Web Service | [https://agnijnana-backend.onrender.com](https://agnijnana-backend.onrender.com) | Real-time CV metrology, RCA, and risk prediction |
+| **API Health** | System Health Check | [https://agnijnana-backend.onrender.com/health](https://agnijnana-backend.onrender.com/health) | Live backend status: `{"status":"ok",...}` |
+| **API Docs** | Interactive OpenAPI / Swagger UI | [https://agnijnana-backend.onrender.com/docs](https://agnijnana-backend.onrender.com/docs) | Full interactive API test console |
+| **Database & Storage** | Supabase Project (`lsmyqtixlvwbwrtpvgss`) | [https://supabase.com](https://supabase.com) | PostgreSQL 15 + `wheel-images` public storage bucket |
 
 ---
 
@@ -113,7 +125,7 @@ flowchart TD
 ## 💻 Tech Stack
 
 - **Frontend**: React 18, Vite 5, Three.js, React-Three-Fiber, Lucide Icons, Pure CSS3 Design Tokens.
-- **Backend**: Python 3.10+ / 3.11+, FastAPI, Pydantic v2, Uvicorn, Pillow, NumPy, SciPy.
+- **Backend**: Python 3.10+ / 3.11+ / 3.14, FastAPI, Pydantic v2, Uvicorn, Pillow, NumPy, SciPy, Pandas.
 - **Database & Storage**: Supabase (PostgreSQL 15), Supabase Storage Bucket (`wheel-images`).
 - **Cloud Deployment**: Render (Backend Web Service), Vercel (Frontend Single Page App).
 - **Standards & Compliance**: SAE J328 Radial Fatigue, IATF 16949 Automotive Quality Management, ISO 9001:2015.
@@ -123,10 +135,18 @@ flowchart TD
 ## 🛠 Getting Started & Installation (Clone Method)
 
 ### Step 1: Clone the Repository
-Open your terminal and clone the repository:
+Clone from your preferred GitHub remote:
+
+**Primary Repository:**
 ```bash
 git clone https://github.com/Ganesh40292/Agnijnana.git
 cd Agnijnana
+```
+
+**Secondary Repository:**
+```bash
+git clone https://github.com/Gampu2005/agnijnana.git
+cd agnijnana
 ```
 
 ---
@@ -152,10 +172,11 @@ cd Agnijnana
 
 3. Install required Python packages:
    ```bash
+   pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
-4. Configure environment variables (Optional for local testing; default fallbacks work out of the box):
+4. Configure environment variables (create a `.env` in `backend/` or use the defaults):
    ```bash
    cp .env.example .env
    ```
@@ -166,6 +187,7 @@ cd Agnijnana
    ```
    - API Server: `http://localhost:8000`
    - Interactive Swagger Docs: `http://localhost:8000/docs`
+   - Health Check: `http://localhost:8000/health`
 
 ---
 
@@ -181,7 +203,14 @@ cd Agnijnana
    npm install
    ```
 
-3. Start the Vite development server:
+3. Configure frontend environment variables in `.env`:
+   ```env
+   VITE_API_BASE_URL=https://agnijnana-backend.onrender.com
+   VITE_SUPABASE_URL=https://lsmyqtixlvwbwrtpvgss.supabase.co
+   VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+   ```
+
+4. Start the Vite development server:
    ```bash
    npm run dev
    ```
@@ -209,53 +238,46 @@ npm run build
 
 ### 1. Database & Storage (Supabase)
 1. Log into your [Supabase Console](https://supabase.com).
-2. Create a new project.
-3. Open the **SQL Editor** and run the database initialization script from:
+2. Create or select project `lsmyqtixlvwbwrtpvgss`.
+3. In the **SQL Editor**, execute the DDL schema from:
    [`automotive-wheel-quality-intelligence/database/schema/schema.sql`](./automotive-wheel-quality-intelligence/database/schema/schema.sql)
-4. Open the **Storage** section and create a bucket named:
-   ```text
-   wheel-images
-   ```
-5. Copy your **Project URL** and **API Keys** from **Project Settings → API**.
+4. Under **Storage**, ensure a public bucket named **`wheel-images`** is created with read access.
 
 ---
 
 ### 2. Backend (Render)
-A production Blueprint is already included at [`render.yaml`](./render.yaml).
-
-**Option A (Automatic Blueprint):**
-1. In [Render](https://render.com), select **New +** → **Blueprint**.
-2. Connect your `Ganesh40292/Agnijnana` repository.
-3. Render automatically provisions the web service using `render.yaml`.
-
-**Option B (Manual Web Service):**
-1. **Name**: `automotive-quality-backend`
-2. **Root Directory**: `automotive-wheel-quality-intelligence/backend`
-3. **Build Command**: `pip install -r requirements.txt`
-4. **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. **Environment Variables**:
-   - `PYTHON_VERSION`: `3.11.9`
-   - `ENVIRONMENT`: `production`
-   - `CORS_ORIGINS`: `*`
-   - `SUPABASE_URL`: *(your Supabase project URL)*
-   - `SUPABASE_KEY`: *(your Supabase service role key)*
-   - `SUPABASE_BUCKET`: `wheel-images`
+Deployed as a Python Web Service on Render:
+- **Build Command**: `pip install --upgrade pip && pip install -r requirements.txt`
+- **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- **Root Directory**: `automotive-wheel-quality-intelligence/backend`
+- **Environment Variables**:
+  ```env
+  ENVIRONMENT=production
+  DEBUG=False
+  PORT=10000
+  SUPABASE_URL=https://lsmyqtixlvwbwrtpvgss.supabase.co
+  SUPABASE_KEY=<your-supabase-anon-key>
+  SUPABASE_SERVICE_ROLE_KEY=<your-supabase-service-role-key>
+  SUPABASE_BUCKET=wheel-images
+  DATABASE_URL=postgresql://postgres.lsmyqtixlvwbwrtpvgss:%23Ganesh1472583690@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres
+  CORS_ORIGINS=["*","http://localhost:5173","https://*.vercel.app"]
+  SECRET_KEY=agnijnana-wheel-inspection-production-secret-key-2026
+  ```
 
 ---
 
 ### 3. Frontend (Vercel)
-A client-side rewrite configuration is ready in [`vercel.json`](./automotive-wheel-quality-intelligence/frontend/vercel.json).
-
-1. Log into [Vercel](https://vercel.com) and click **Add New...** → **Project**.
-2. Import the `Ganesh40292/Agnijnana` GitHub repository.
-3. Set **Root Directory** to:
-   ```text
-   automotive-wheel-quality-intelligence/frontend
-   ```
-4. Framework Preset: **Vite**.
-5. Add Environment Variable:
-   - **`VITE_API_BASE_URL`**: `https://automotive-quality-backend.onrender.com` *(your live Render backend URL)*
-6. Click **Deploy**.
+Deployed as a Vite Single Page Application on Vercel:
+- **Framework Preset**: `Vite`
+- **Root Directory**: `automotive-wheel-quality-intelligence/frontend`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment Variables**:
+  ```env
+  VITE_API_BASE_URL=https://agnijnana-backend.onrender.com
+  VITE_SUPABASE_URL=https://lsmyqtixlvwbwrtpvgss.supabase.co
+  VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  ```
 
 ---
 
@@ -291,11 +313,11 @@ Agnijnana/
     ├── database/
     │   └── schema/schema.sql                       # Complete PostgreSQL DDL schema
     ├── backend/                                    # FastAPI Backend
-    │   ├── requirements.txt                        # Python dependencies
+    │   ├── requirements.txt                        # Python dependencies (FastAPI, NumPy, SciPy, Pandas)
     │   ├── Procfile                                # Heroku/PaaS process launcher
     │   ├── app/
     │   │   ├── main.py                             # API router registration & CORS
-    │   │   ├── api/                                # Modular API endpoints
+    │   │   ├── api/                                # Modular API endpoints (inspect, risk, defects)
     │   │   ├── schemas/quality.py                  # Pydantic AI contract models
     │   │   └── services/
     │   │       ├── cv_inspection_engine.py         # Autonomous CV Metrology
